@@ -42,6 +42,8 @@ var exchange float64
 var DT_START_DATE = time.Date(2017, time.October, 31, 16, 0, 0, 1, time.UTC)
 var redisClient *redis.Client
 var timeZone = time.FixedZone("BeiJing", 8*3600)
+var serverInitializationSteps int
+var initializingProcess int
 
 // 今日为龙币发行的第几天
 func dtDay(day time.Time) int {
@@ -93,6 +95,9 @@ func debug(format string, args ...interface{}) {
 	}
 }
 
+func logUpdate(isLastUpdate bool, format string, args ...interface{}) {
+	but.NewButer(nil, format, args...).Color(but.COLOR_BLUE, false).Show(but.SET_BOLD).OneLinePrint(isLastUpdate)
+}
 func logInfo(format string, args ...interface{}) {
 	but.NewButer(nil, format, args...).Color(but.COLOR_BLUE, false).Print()
 }
@@ -140,6 +145,7 @@ func listCoin() {
 		}
 		updateCoinDetail(cids...)
 	}
+	initializingProcess++
 }
 
 func updateCoinDetail(coinIDs ...int) bool {
@@ -230,6 +236,7 @@ func (d *dragonex) updateDTdetail() {
 	d.DTPeriod = dtPeriod(d.DTDay)
 	d.DTTodayRelease = dtTodayRelease(d.DTDay, d.DTPeriod)
 	d.DTTotalRelease = dtTotalRelease(d.DTDay, d.DTPeriod)
+	initializingProcess++
 }
 
 func task(hour, min, sec int) {
@@ -302,16 +309,26 @@ func setupRedis() {
 		panic(fmt.Sprintf("setup redis failed. error: %v\n", err))
 	}
 	logInfo("redis response: %v\n", res)
+	initializingProcess++
 }
 
 func init() {
 	flag.Parse()
 	logInfo("初始化数据中...\n")
+	go func() {
+		for {
+			done := initializingProcess == 3
+			logUpdate(done, "启动进度：%6.2f%%\n", float32(initializingProcess)/3*100)
+			if done {
+				logInfo("初始化完毕\n")
+				break
+			}
+		}
+	}()
 	setupRedis()
 	exchange = 6.5
 	d.updateDTdetail()
 	listCoin()
-	logInfo("初始化完毕\n")
 	go func() {
 		t := time.NewTicker(time.Second * 2)
 		for {
@@ -334,6 +351,7 @@ func dtCost(dtAmount float64, exchangeAmount float64, rate float64) float64 {
 func income(amount float64) float64 {
 	return 0.002 * amount
 }
+
 func (d *dragonex) String() string {
 	headformat := "%10s%20s%20s%20s%20s\n"
 	bodyFormat := "%10s%20.4f%20.4f%20.4f%20.4f\n"
