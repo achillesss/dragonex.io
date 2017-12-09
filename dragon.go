@@ -89,20 +89,20 @@ func dtTotalRelease(day, period int) float64 {
 
 func debug(format string, args ...interface{}) {
 	if *debugOn {
-		but.NewButer(format, args...).Color(but.COLOR_CYAN, false).Print()
+		but.NewButer(nil, format, args...).Color(but.COLOR_CYAN, false).Print()
 	}
 }
 
 func logInfo(format string, args ...interface{}) {
-	but.NewButer(format, args...).Color(but.COLOR_BLUE, false).Print()
+	but.NewButer(nil, format, args...).Color(but.COLOR_BLUE, false).Print()
 }
 
 func logWarn(format string, args ...interface{}) {
-	but.NewButer(format, args...).Color(but.COLOR_YELLOW, false).Print()
+	but.NewButer(nil, format, args...).Color(but.COLOR_YELLOW, false).Print()
 }
 
 func logErr(format string, args ...interface{}) {
-	but.NewButer(format, args...).Color(but.COLOR_RED, false).Print()
+	but.NewButer(nil, format, args...).Color(but.COLOR_RED, false).Print()
 }
 
 func makeRequest(method, url string, p params) *gorequest.SuperAgent {
