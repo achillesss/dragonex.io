@@ -355,13 +355,13 @@ func income(amount float64) float64 {
 func (d *dragonex) String() string {
 	headformat := "%10s%20s%20s%20s%20s\n"
 	bodyFormat := "%10s%20.4f%20.4f%20.4f%20.4f\n"
-	str := fmt.Sprintf(headformat, "Coin", "Price($)", "Price(¥)", "24h Amount($)", "24h Amount(¥)")
+	str := fmt.Sprintf(headformat, "Coin", "Price($)", "Price(¥)", "Amount($)", "Amount(¥)")
 	var totalAmount float64
 	for _, coin := range d.Coins {
 		totalAmount += coin.Volume
 		str += fmt.Sprintf(bodyFormat, coin.Name, coin.Price, coin.Price*exchange, coin.Volume, coin.Volume*exchange)
 	}
-	str += fmt.Sprintf(bodyFormat, "Total", 0.0, 0.0, totalAmount, totalAmount*exchange)
+	str += fmt.Sprintf(bodyFormat, "24h Total", 0.0, 0.0, totalAmount, totalAmount*exchange)
 	yestoday := time.Now().In(timeZone).AddDate(0, 0, -1)
 	yestodayStr := yestoday.Format("2006-01-02")
 	yesAmount, _ := strconv.ParseFloat(redisClient.Get(totalAmountKey(yestodayStr)).Val(), 64)
@@ -373,8 +373,8 @@ func (d *dragonex) String() string {
 	hc := dtCost(d.DTTodayRelease, totalAmount*exchange, 0.3)
 	lc := dtCost(d.DTTodayRelease, totalAmount*exchange, 0.5)
 	in := income(totalAmount * exchange)
-	str += fmt.Sprintf("%10s%10s%15s%15s%15s%15s%15s\n", "DT:    Day", "Period", "Today Release", "Total Release", "Cost_H(¥)", "Cost_L(¥)", "Bonus(¥)")
-	str += fmt.Sprintf("%10d%10d%15.4f%15.4f%15.4f%15.4f%15.4f\n", d.DTDay, d.DTPeriod, d.DTTodayRelease, d.DTTotalRelease, hc, lc, in/d.DTTotalRelease)
+	str += fmt.Sprintf("%15s%10s%15s%15s%15s%15s%15s\n", "DT:         Day", "Period", "Today Release", "Total Release", "Cost_H(¥)", "Cost_L(¥)", "Bonus(¥)")
+	str += fmt.Sprintf("%15s%10d%15.4f%15.4f%15.4f%15.4f%15.4f\n", fmt.Sprintf("24h    Day:%4d", d.DTDay), d.DTPeriod, d.DTTodayRelease, d.DTTotalRelease, hc, lc, in/d.DTTotalRelease)
 
 	dtYestoday := dtDay(yestoday)
 	dtYestodayPeriod := dtPeriod(dtYestoday)
@@ -384,7 +384,7 @@ func (d *dragonex) String() string {
 	dtYestodayLowCost := dtCost(dtYestodayRelease, yesAmount, .5)
 	yestodayIncome := income(yesAmount)
 	if yestodayIncome != 0 {
-		str += fmt.Sprintf("%10s%10d%15.4f%15.4f%15.4f%15.4f%15.4f\n", "yestoday", dtYestodayPeriod, dtYestodayRelease, dtYestodayTotalRelease, dtYestodayHighCost, dtYestodayLowCost, yestodayIncome/dtYestodayTotalRelease)
+		str += fmt.Sprintf("%15s%10d%15.4f%15.4f%15.4f%15.4f%15.4f\n", "yestoday", dtYestodayPeriod, dtYestodayRelease, dtYestodayTotalRelease, dtYestodayHighCost, dtYestodayLowCost, yestodayIncome/dtYestodayTotalRelease)
 	}
 
 	str += fmt.Sprintf("==========\n")
