@@ -26,9 +26,9 @@
   name = "github.com/achillesss/but4print"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/go-redis/redis"
-  version = "6.7.4"
 
 [[constraint]]
+  branch = "master"
   name = "github.com/parnurzeal/gorequest"
-  version = "0.2.1"

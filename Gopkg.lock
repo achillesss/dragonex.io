@@ -8,20 +8,44 @@
   revision = "eb95df918987fba9dc20e66cb824c62594f05ef4"
 
 [[projects]]
+  branch = "master"
   name = "github.com/go-redis/redis"
   packages = [".","internal","internal/consistenthash","internal/hashtag","internal/pool","internal/proto"]
-  revision = "e5e021257bfc6d5fbf0beac33e30194311fb189f"
-  version = "v6.7.4"
+  revision = "b879d4e0b950159c63ec69d0ed4604dcd0d97bfd"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/moul/http2curl"
+  packages = ["."]
+  revision = "9ac6cf4d929b2fa8fd2d2e6dec5bb0feb4f4911d"
 
 [[projects]]
   name = "github.com/parnurzeal/gorequest"
   packages = ["."]
-  revision = "8d2969c35f5ea2f8f804abe876221f665b9143aa"
-  version = "v0.2.1"
+  revision = "a578a48e8d6ca8b01a3b18314c43c6716bb5f5a3"
+  version = "v0.2.15"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = ["idna","publicsuffix"]
+  revision = "dc871a5d77e227f5bbf6545176ef3eeebf87e76e"
+
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/text"
+  packages = ["collate","collate/build","internal/colltab","internal/gen","internal/tag","internal/triegen","internal/ucd","language","secure/bidirule","transform","unicode/bidi","unicode/cldr","unicode/norm","unicode/rangetable"]
+  revision = "3b24cac7bc3a458991ab409aa2a339ac9e0d60d6"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "966e8f4afd59811842030393f807364c594880247b55659b329e68887d323b0e"
+  inputs-digest = "613dbdf659b74755678a81c8b5425c396685f45528bb96c82e77267a0ed724f6"
   solver-name = "gps-cdcl"
   solver-version = 1
