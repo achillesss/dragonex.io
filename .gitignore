@@ -1,1 +1,5 @@
-/vendor
+/vendor/
+**/target/
+Cargo.lock
+.DS_Store
+.vs_code

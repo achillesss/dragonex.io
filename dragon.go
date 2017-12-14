@@ -306,9 +306,10 @@ func setupRedis() {
 	redisClient = redis.NewClient(opts)
 	res, err := redisClient.Ping().Result()
 	if err != nil {
-		panic(fmt.Sprintf("setup redis failed. error: %v\n", err))
+		logInfo("没有检测到 redis，不储存本地数据\n")
+	} else {
+		logInfo("redis response: %v\n", res)
 	}
-	logInfo("redis response: %v\n", res)
 	initializingProcess++
 }
 
